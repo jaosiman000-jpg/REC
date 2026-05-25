@@ -824,7 +824,19 @@ function renderSalesScreen() {
     { q: "🔒 ¿Necesito pagar alguna mensualidade?", a: "No. El pago es único. Pagas una sola vez y tendrás acceso ilimitado al contenido, sin mensualidades ni cargos adicionales." }
   ];
 
-  const checkoutUrl = "https://pay.hotmart.com/L105983669G?checkoutMode=10";
+  let checkoutUrl = "https://pay.hotmart.com/L105983669G?checkoutMode=10";
+  try {
+    const currentParams = new URLSearchParams(window.location.search);
+    if (currentParams.toString()) {
+      const urlObj = new URL(checkoutUrl);
+      currentParams.forEach((value, key) => {
+        urlObj.searchParams.set(key, value);
+      });
+      checkoutUrl = urlObj.toString();
+    }
+  } catch (e) {
+    console.error("Error forwarding UTM parameters:", e);
+  }
 
   // Renders comparative boxes (Sem seguir o código vs Seguindo o código)
   const comparisonBoxesHtml = `

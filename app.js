@@ -217,6 +217,7 @@ function renderStep() {
       break;
     case "final-video":
       container.innerHTML = renderFinalVideoScreen();
+      initVturbVslPlayer();
       runFinalVideoDelay();
       break;
     case "sales":
@@ -744,11 +745,8 @@ function renderFinalVideoScreen() {
       <h2 class="text-3xl font-extrabold leading-tight text-primary sm:text-4xl">¡El problema es el Síndrome de Saturación Emocional!</h2>
       <p class="mt-3 text-center text-lg font-bold">Mira el video a continuación para entender cómo resolverlo 👇</p>
       
-      <div class="mt-6">
-        ${renderVideoPlaceholder("vsl2", "Protocolo de Reactivación Emocional — Código Secreto", 185, () => {
-          // Quando o vídeo simulado terminar
-          showDiagnosticButton();
-        })}
+      <div class="mt-6" style="width: 100%; max-width: 480px; margin: 0 auto; border-radius: 18px; overflow: hidden; box-shadow: 0 12px 32px rgba(0,0,0,0.4);">
+        <vturb-smartplayer id="vid-6a1450cd93af3c4030723b94" style="display: block; margin: 0 auto; width: 100%; max-width: 400px;"></vturb-smartplayer>
       </div>
       
       <div class="mt-6" id="diagnostic-button-container" style="display: none;">
@@ -760,8 +758,26 @@ function renderFinalVideoScreen() {
   `;
 }
 
+// Inicializar el player de VTurb de manera dinámica al renderizar la VSL principal
+function initVturbVslPlayer() {
+  // Remover script anterior para evitar duplicidad si el usuario va y vuelve de pantalla
+  const existingScript = document.getElementById("vturb-vsl-script");
+  if (existingScript) {
+    existingScript.remove();
+  }
+
+  // Crear y agregar el script de VTurb al head de forma dinâmica
+  const s = document.createElement("script");
+  s.id = "vturb-vsl-script";
+  s.type = "text/javascript";
+  s.src = "https://scripts.converteai.net/4f709ec3-848b-43ff-bdb3-b7acf251c613/players/6a1450cd93af3c4030723b94/v4/player.js";
+  s.async = true;
+  document.head.appendChild(s);
+}
+
 function runFinalVideoDelay() {
-  const delay = 185000; // 185 seconds (3m5s)
+  const isTest = new URLSearchParams(window.location.search).get("test") === "true";
+  const delay = isTest ? 3000 : 255000; // 3 segundos para pruebas, de lo contrario 4 min 15 seg (255000ms)
   setTimeout(showDiagnosticButton, delay);
 }
 

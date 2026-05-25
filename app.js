@@ -1066,7 +1066,9 @@ function renderImagePlaceholder(label, className = "", contain = false) {
 
 // Representación de Player de Video Real con Skin Premium
 function renderVideoPlaceholder(id, title, durationSeconds = 185, onCompleteCallback) {
-  const videoSrc = id === 'vsl1' ? 'depoimento-video.mp4' : 'vsl-pronta.mp4';
+  const videoSrc = id === 'vsl1' 
+    ? 'https://github.com/jaosiman000-jpg/REC/releases/download/v1.0.0/depoimento-video.mp4' 
+    : 'https://github.com/jaosiman000-jpg/REC/releases/download/v1.0.0/vsl-pronta.mp4';
   const callbackName = `video_callback_${id}`;
   window[callbackName] = onCompleteCallback;
   

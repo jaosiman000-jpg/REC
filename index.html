@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Descubre si tu ex todavía te ama y cómo reactivar el ciclo A.R.E.A. en su cerebro en 12 días para que vuelva contigo.">
+  <meta name="robots" content="index, follow">
+  <title>Reconquista Magnética - Test de Reactivación Emocional</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  
+  <div class="app-wrapper">
+    <div class="app-container">
+      
+      <!-- Cabecera del Embudo -->
+      <header class="relative flex items-center justify-between" id="funnel-header" style="height: 3rem; width: 100%;">
+        <button aria-label="Volver" id="btn-back" class="header-btn pointer-events-none opacity-0">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6">
+            <path d="m12 19-7-7 7-7" />
+            <path d="M19 12H5" />
+          </svg>
+        </button>
+        
+        <div class="absolute left-1/2 -translate-x-1/2" style="display: flex; align-items: center; gap: 0.35rem;">
+          <span style="font-size: 1.25rem; line-height: 1;">🧲</span>
+          <div class="font-black tracking-widest text-primary text-base uppercase" style="white-space: nowrap;">
+            Reconquista Magnética
+          </div>
+        </div>
+        
+        <!-- Espaciador a la derecha para equilibrio visual -->
+        <div style="width: 2.25rem; height: 2.25rem;"></div>
+      </header>
+      
+      <!-- Barra de Progreso Dinámica -->
+      <div class="progress-bar-container" id="progress-bar-wrapper">
+        <div id="progress-bar" class="progress-bar-fill" style="width: 4.3478%;"></div>
+      </div>
+      
+      <!-- Container Dinámico del Quiz -->
+      <main id="quiz-container" class="flex flex-1 flex-col pt-8">
+        <!-- El contenido será inyectado dinámicamente por app.js -->
+      </main>
+      
+    </div>
+  </div>
+
+  <!-- Botón de Bypass para Pruebas Rápidas -->
+  <div class="test-bypass-btn" id="bypass-btn" onclick="toggleTestMode()">
+    <span>🔧 MODO PRUEBA:</span>
+    <span id="bypass-status">DESACTIVADO</span>
+  </div>
+
+  <script>
+    // Administrador del Modo Prueba
+    function updateBypassUI() {
+      const isTest = new URLSearchParams(window.location.search).get("test") === "true";
+      const statusEl = document.getElementById("bypass-status");
+      const btnEl = document.getElementById("bypass-btn");
+      if (statusEl) {
+        statusEl.innerText = isTest ? "ACTIVADO" : "DESACTIVADO";
+        if (isTest) {
+          btnEl.style.backgroundColor = "rgba(16, 185, 129, 0.9)"; // green background when active
+        } else {
+          btnEl.style.backgroundColor = "rgba(15, 23, 42, 0.85)";
+        }
+      }
+    }
+    
+    function toggleTestMode() {
+      const url = new URL(window.location.href);
+      const isTest = url.searchParams.get("test") === "true";
+      if (isTest) {
+        url.searchParams.delete("test");
+      } else {
+        url.searchParams.set("test", "true");
+      }
+      window.location.href = url.toString();
+    }
+    
+    // Actualizar UI al iniciar
+    updateBypassUI();
+  </script>
+  <script src="app.js"></script>
+</body>
+</html>

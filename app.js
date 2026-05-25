@@ -582,11 +582,8 @@ function renderVideoScreen() {
       <h2 class="text-2xl font-extrabold leading-tight text-primary sm:text-3xl">¡Mira lo que ella logró, incluso con su ex sin siquiera mirarla a la cara!</h2>
       <p class="mt-3 text-center text-base text-foreground">El 93% de las mujeres vieron resultados notables en los <strong>primeros días aplicando el método...</strong></p>
       
-      <div class="mt-6">
-        ${renderVideoPlaceholder("vsl1", "Martina Alves — Cómo reactivar su amor", 12, () => {
-          // Quando o vídeo simulado terminar de tocar
-          console.log("Simulated video 1 finished!");
-        })}
+      <div class="mt-6" style="width: 100%; max-width: 420px; margin: 0 auto; border-radius: 18px; overflow: hidden; box-shadow: 0 12px 32px rgba(0,0,0,0.4);">
+        <vturb-smartplayer id="vid-6a144f4bb76950cfcfb3e729" style="display: block; margin: 0 auto; width: 100%; max-width: 400px;"></vturb-smartplayer>
       </div>
       
       <!-- Depoimentos Carousel -->

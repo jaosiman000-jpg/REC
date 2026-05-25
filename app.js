@@ -746,9 +746,7 @@ function renderFinalVideoScreen() {
 }
 
 function runFinalVideoDelay() {
-  const isTest = new URLSearchParams(window.location.search).get("test") === "true";
-  const delay = isTest ? 3000 : 185000; // 3 seconds for tests, otherwise 185 seconds (3m5s)
-  
+  const delay = 185000; // 185 seconds (3m5s)
   setTimeout(showDiagnosticButton, delay);
 }
 
@@ -1068,8 +1066,7 @@ function renderImagePlaceholder(label, className = "", contain = false) {
 
 // Representación de Placeholder de Video
 function renderVideoPlaceholder(id, title, durationSeconds = 185, onCompleteCallback) {
-  const isTest = new URLSearchParams(window.location.search).get("test") === "true";
-  const actualDuration = isTest ? 5 : durationSeconds;
+  const actualDuration = durationSeconds;
   
   // Registrar callback globalmente para eventos onclick inline
   const callbackName = `video_callback_${id}`;

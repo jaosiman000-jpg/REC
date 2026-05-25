@@ -46,42 +46,6 @@
     </div>
   </div>
 
-  <!-- Botón de Bypass para Pruebas Rápidas -->
-  <div class="test-bypass-btn" id="bypass-btn" onclick="toggleTestMode()">
-    <span>🔧 MODO PRUEBA:</span>
-    <span id="bypass-status">DESACTIVADO</span>
-  </div>
-
-  <script>
-    // Administrador del Modo Prueba
-    function updateBypassUI() {
-      const isTest = new URLSearchParams(window.location.search).get("test") === "true";
-      const statusEl = document.getElementById("bypass-status");
-      const btnEl = document.getElementById("bypass-btn");
-      if (statusEl) {
-        statusEl.innerText = isTest ? "ACTIVADO" : "DESACTIVADO";
-        if (isTest) {
-          btnEl.style.backgroundColor = "rgba(16, 185, 129, 0.9)"; // green background when active
-        } else {
-          btnEl.style.backgroundColor = "rgba(15, 23, 42, 0.85)";
-        }
-      }
-    }
-    
-    function toggleTestMode() {
-      const url = new URL(window.location.href);
-      const isTest = url.searchParams.get("test") === "true";
-      if (isTest) {
-        url.searchParams.delete("test");
-      } else {
-        url.searchParams.set("test", "true");
-      }
-      window.location.href = url.toString();
-    }
-    
-    // Actualizar UI al iniciar
-    updateBypassUI();
-  </script>
   <script src="app.js"></script>
 </body>
 </html>

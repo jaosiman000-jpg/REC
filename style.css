@@ -719,26 +719,4 @@ summary {
   display: block;
 }
 
-/* Test/Developer bypass button styling */
-.test-bypass-btn {
-  position: fixed;
-  bottom: 1rem;
-  right: 1rem;
-  background-color: rgba(15, 23, 42, 0.85);
-  color: #ffffff;
-  padding: 0.5rem 0.75rem;
-  border-radius: 8px;
-  font-size: 0.75rem;
-  font-weight: bold;
-  z-index: 9999;
-  cursor: pointer;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-}
 
-.test-bypass-btn:hover {
-  background-color: var(--foreground);
-}

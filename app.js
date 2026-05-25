@@ -961,7 +961,7 @@ function renderSalesScreen() {
       <div class="mt-8 rounded-2xl border-2 border-success p-5 bg-card">
         <div class="flex items-center justify-between gap-4">
           <div class="text-lg font-extrabold leading-tight text-left">Código Reconquista<br>Magnética</div>
-          <div class="rounded-xl bg-muted px-4 py-3 text-2xl font-extrabold text-success">$9,9</div>
+          <div class="rounded-xl bg-muted px-4 py-3 text-2xl font-extrabold text-success">$9,90</div>
         </div>
       </div>
       

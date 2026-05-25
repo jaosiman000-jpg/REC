@@ -824,7 +824,7 @@ function renderSalesScreen() {
     { q: "🔒 ¿Necesito pagar alguna mensualidade?", a: "No. El pago es único. Pagas una sola vez y tendrás acceso ilimitado al contenido, sin mensualidades ni cargos adicionales." }
   ];
 
-  const checkoutUrl = "https://pay.hotmart.com/L105983669G";
+  const checkoutUrl = "https://pay.hotmart.com/L105983669G?checkoutMode=10";
 
   // Renders comparative boxes (Sem seguir o código vs Seguindo o código)
   const comparisonBoxesHtml = `

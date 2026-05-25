@@ -582,8 +582,11 @@ function renderVideoScreen() {
       <h2 class="text-2xl font-extrabold leading-tight text-primary sm:text-3xl">¡Mira lo que ella logró, incluso con su ex sin siquiera mirarla a la cara!</h2>
       <p class="mt-3 text-center text-base text-foreground">El 93% de las mujeres vieron resultados notables en los <strong>primeros días aplicando el método...</strong></p>
       
-      <div class="mt-6" style="width: 100%; max-width: 420px; margin: 0 auto; border-radius: 18px; overflow: hidden; box-shadow: 0 12px 32px rgba(0,0,0,0.4);">
-        <vturb-smartplayer id="vid-6a144f4bb76950cfcfb3e729" style="display: block; margin: 0 auto; width: 100%; max-width: 400px;"></vturb-smartplayer>
+      <div class="mt-6">
+        ${renderVideoPlaceholder("vsl1", "Martina Alves — Cómo reactivar su amor", 12, () => {
+          // Quando o vídeo simulado terminar de tocar
+          console.log("Simulated video 1 finished!");
+        })}
       </div>
       
       <!-- Depoimentos Carousel -->
@@ -1061,127 +1064,81 @@ function renderImagePlaceholder(label, className = "", contain = false) {
   `;
 }
 
-// Representación de Player de Video Real con Skin Premium
+// Representación de Placeholder de Video con Reproducción Simulada
 function renderVideoPlaceholder(id, title, durationSeconds = 185, onCompleteCallback) {
-  const videoSrc = id === 'vsl1' 
-    ? 'https://github.com/jaosiman000-jpg/REC/releases/download/v1.0.0/depoimento-video.mp4' 
-    : 'https://github.com/jaosiman000-jpg/REC/releases/download/v1.0.0/vsl-pronta.mp4';
+  const isTest = new URLSearchParams(window.location.search).get("test") === "true";
+  const actualDuration = isTest ? 5 : durationSeconds;
+  
+  // Registrar callback globalmente para eventos onclick inline
   const callbackName = `video_callback_${id}`;
   window[callbackName] = onCompleteCallback;
   
-  const isVsl1 = id === 'vsl1';
-  const containerClass = isVsl1 ? 'video-placeholder vsl1-video-container' : 'video-placeholder vsl2-video-container';
-  const aspectRatioStyle = isVsl1 ? 'padding-top: 133.33%;' : 'padding-top: 56.25%;'; // 3:4 vertical para depoimento, 16:9 widescreen para VSL
-
   return `
-    <div class="${containerClass}" id="${id}-video-container" style="position: relative; width: 100%; background-color: #000; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.35);">
-      <div style="${aspectRatioStyle}"></div>
-      
-      <video id="${id}-video-player" playsinline webkit-playsinline preload="auto" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; background: #000;">
-        <source src="${videoSrc}" type="video/mp4">
-        Your browser does not support HTML5 video.
-      </video>
-      
-      <!-- Premium Overlay (Play Button & Titles) -->
-      <div id="${id}-video-overlay" onclick="playRealVideo('${id}')" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(0,0,0,0.65); color: #fff; cursor: pointer; transition: opacity 0.3s ease, visibility 0.3s ease; z-index: 10;">
-        <div class="video-play-btn" style="width: 5rem; height: 5rem; border-radius: 9999px; background-color: var(--primary); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 0 0 rgba(225,29,72,0.6); animation: video-play-pulse 2s infinite; transition: transform 0.2s;">
-          <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="currentColor" style="margin-left: 4px; color: white;">
+    <div class="video-placeholder ${id}-video-container" id="${id}-video">
+      <div class="video-placeholder-ratio"></div>
+      <div class="video-placeholder-content">
+        <div class="video-play-btn" onclick="startSimulatedVideo('${id}', ${actualDuration}, window['${callbackName}'])">
+          <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="currentColor" style="margin-left: 4px;">
             <path d="M8 5v14l11-7z"/>
           </svg>
         </div>
-        <div class="video-placeholder-title" style="font-weight: 800; font-size: 1.25rem; margin-top: 1.25rem; padding: 0 1.5rem; text-align: center; text-shadow: 0 2px 4px rgba(0,0,0,0.8); font-family: 'Outfit', sans-serif;">${title}</div>
-        <div class="video-placeholder-desc" style="font-size: 0.875rem; opacity: 0.9; margin-top: 0.5rem; text-shadow: 0 1px 2px rgba(0,0,0,0.8); font-family: 'Inter', sans-serif; font-weight: 500; background: rgba(225,29,72,0.2); padding: 4px 12px; border-radius: 999px; border: 1px solid rgba(225,29,72,0.3);">Haz clic para reproducir</div>
+        <div class="video-placeholder-title">${title}</div>
+        <div class="video-placeholder-desc">Haz clic para ver la explicación</div>
+        
+        <div class="video-playing-indicator">
+          <svg class="animate-pulse h-10 w-10 mx-auto text-primary" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.53 8.47a7 7 0 010 9.06m3.53-12.59a11 11 0 010 16.12M12 4v16m-8-4v-8m4 6v-4" />
+          </svg>
+          <div class="mt-4 font-extrabold text-lg">Video en reproducción...</div>
+          <div class="mt-2 text-sm text-muted-foreground" id="${id}-countdown">Espera ${actualDuration}s</div>
+        </div>
       </div>
       
-      <!-- Custom Bottom Progress Bar -->
-      <div style="position: absolute; bottom: 0; left: 0; width: 100%; background: linear-gradient(transparent, rgba(0, 0, 0, 0.85)); padding: 16px 20px; display: flex; align-items: center; gap: 14px; z-index: 5; pointer-events: none;">
-        <div style="flex: 1; height: 6px; background-color: rgba(255, 255, 255, 0.25); border-radius: 3px; position: relative; overflow: hidden;">
-          <div id="${id}-progress-fill" style="position: absolute; top: 0; left: 0; height: 100%; background-color: var(--primary); width: 0%; transition: width 0.1s linear;"></div>
+      <div class="video-placeholder-overlay-bottom">
+        <div class="video-progress-bar">
+          <div class="video-progress-fill" id="${id}-progress-fill" style="width: 0%;"></div>
         </div>
-        <span id="${id}-timer" style="font-size: 0.75rem; font-weight: 700; color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.8); min-width: 35px; text-align: right; font-family: 'Inter', sans-serif;">0:00</span>
+        <span class="text-xs text-white" id="${id}-timer" style="margin-left: 10px;">0:00</span>
       </div>
     </div>
   `;
 }
 
-// Iniciar player de video real
-window.playRealVideo = function(id) {
-  const video = document.getElementById(id + "-video-player");
-  const overlay = document.getElementById(id + "-video-overlay");
+// Iniciar player de video simulado
+window.startSimulatedVideo = function(id, duration, onCompleteCallback) {
+  const container = document.getElementById(id + "-video");
+  if (!container || container.classList.contains("video-playing")) return;
+  
+  container.classList.add("video-playing");
+  
   const progressFill = document.getElementById(id + "-progress-fill");
   const timer = document.getElementById(id + "-timer");
-  const callback = window[`video_callback_${id}`];
-
-  if (!video || !overlay) return;
-
-  // Oculta overlay
-  overlay.style.opacity = '0';
-  setTimeout(() => {
-    if (overlay.style.opacity === '0') {
-      overlay.style.visibility = 'hidden';
+  const countdown = document.getElementById(id + "-countdown");
+  
+  let elapsed = 0;
+  
+  if (videoIntervals[id]) clearInterval(videoIntervals[id]);
+  
+  videoIntervals[id] = setInterval(() => {
+    elapsed++;
+    const pct = (elapsed / duration) * 100;
+    if (progressFill) progressFill.style.width = pct + "%";
+    
+    // Actualizar tiempo de reproducción
+    const mins = Math.floor(elapsed / 60);
+    const secs = elapsed % 60;
+    if (timer) timer.innerText = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+    
+    // Actualizar texto del contador
+    const remaining = duration - elapsed;
+    if (countdown) countdown.innerText = `Espera ${remaining}s`;
+    
+    if (elapsed >= duration) {
+      clearInterval(videoIntervals[id]);
+      if (countdown) countdown.innerText = "¡Video completado!";
+      if (onCompleteCallback) onCompleteCallback();
     }
-  }, 300);
-
-  // Toca o vídeo
-  video.play().catch(err => {
-    console.log("Auto-play blocked or error: ", err);
-  });
-
-  // Alterna play/pause ao clicar no vídeo
-  video.style.cursor = 'pointer';
-  video.onclick = function() {
-    if (video.paused) {
-      overlay.style.visibility = 'visible';
-      overlay.style.opacity = '0';
-      // Forçar reflow
-      overlay.offsetHeight;
-      overlay.style.opacity = '0';
-      video.play();
-      overlay.style.visibility = 'hidden';
-    } else {
-      video.pause();
-      overlay.style.visibility = 'visible';
-      overlay.style.opacity = '1';
-      const titleEl = overlay.querySelector('.video-placeholder-title');
-      const descEl = overlay.querySelector('.video-placeholder-desc');
-      if (titleEl) titleEl.innerText = "Video en pausa";
-      if (descEl) descEl.innerText = "Haz clic para continuar";
-    }
-  };
-
-  // Monitora progresso
-  video.ontimeupdate = function() {
-    if (video.duration) {
-      const pct = (video.currentTime / video.duration) * 100;
-      if (progressFill) progressFill.style.width = pct + "%";
-
-      // Calcula tempo percorrido
-      const currentMins = Math.floor(video.currentTime / 60);
-      const currentSecs = Math.floor(video.currentTime % 60);
-
-      if (timer) {
-        timer.innerText = `${currentMins}:${currentSecs < 10 ? '0' : ''}${currentSecs}`;
-      }
-
-      // Ativação do botão de diagnóstico aos 185 segundos (ou fim do vídeo)
-      if (id === 'vsl2' && video.currentTime >= 185) {
-        if (typeof showDiagnosticButton === 'function') {
-          showDiagnosticButton();
-        }
-      }
-    }
-  };
-
-  // Evento de fim do vídeo
-  video.onended = function() {
-    if (callback) callback();
-    overlay.style.visibility = 'visible';
-    overlay.style.opacity = '1';
-    const titleEl = overlay.querySelector('.video-placeholder-title');
-    const descEl = overlay.querySelector('.video-placeholder-desc');
-    if (titleEl) titleEl.innerText = "¡Video completado!";
-    if (descEl) descEl.innerText = "Haz clic para reproducir de nuevo";
-  };
+  }, 1000);
 };
 
 // 7.1. Testimonials Carousel (`lo`)

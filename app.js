@@ -203,6 +203,7 @@ function renderStep() {
       break;
     case "video":
       container.innerHTML = renderVideoScreen();
+      initVturbTestimonialPlayer();
       break;
     case "private-plan":
       container.innerHTML = renderPrivatePlan();
@@ -582,11 +583,8 @@ function renderVideoScreen() {
       <h2 class="text-2xl font-extrabold leading-tight text-primary sm:text-3xl">¡Mira lo que ella logró, incluso con su ex sin siquiera mirarla a la cara!</h2>
       <p class="mt-3 text-center text-base text-foreground">El 93% de las mujeres vieron resultados notables en los <strong>primeros días aplicando el método...</strong></p>
       
-      <div class="mt-6">
-        ${renderVideoPlaceholder("vsl1", "Martina Alves — Cómo reactivar su amor", 12, () => {
-          // Quando o vídeo simulado terminar de tocar
-          console.log("Simulated video 1 finished!");
-        })}
+      <div class="mt-6" style="width: 100%; max-width: 420px; margin: 0 auto; border-radius: 18px; overflow: hidden; box-shadow: 0 12px 32px rgba(0,0,0,0.4);">
+        <vturb-smartplayer id="vid-6a144f4bb76950cfcfb3e729" style="display: block; margin: 0 auto; width: 100%; max-width: 400px;"></vturb-smartplayer>
       </div>
       
       <!-- Depoimentos Carousel -->
@@ -599,6 +597,23 @@ function renderVideoScreen() {
       </button>
     </div>
   `;
+}
+
+// Inicializar el player de VTurb de manera dinámica al renderizar el paso
+function initVturbTestimonialPlayer() {
+  // Remover script anterior para evitar duplicidad si el usuario va y vuelve de pantalla
+  const existingScript = document.getElementById("vturb-testimonial-script");
+  if (existingScript) {
+    existingScript.remove();
+  }
+
+  // Crear y agregar el script de VTurb al head de forma dinámica
+  const s = document.createElement("script");
+  s.id = "vturb-testimonial-script";
+  s.type = "text/javascript";
+  s.src = "https://scripts.converteai.net/4f709ec3-848b-43ff-bdb3-b7acf251c613/players/6a144f4bb76950cfcfb3e729/v4/player.js";
+  s.async = true;
+  document.head.appendChild(s);
 }
 
 // 8. Private Plan Screen
